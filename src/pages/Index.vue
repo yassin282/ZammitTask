@@ -1,24 +1,46 @@
 <template>
   <q-page :class="desktop ? 'page' : 'q-pt-md' + ' bg-grey-11'">
-    <div :class="'full-width' + ' ' + desktop ? 'q-pa-sm' : ''" style="display:flex;">
+    <div
+      :class="'full-width' + ' ' + desktop ? 'q-pa-sm' : ''"
+      style="display:flex;"
+    >
       <div style="margin:auto">
-        <div class="text-block text-subtitle2">{{'Products list \n(' + number+' '+'items)'}}</div>
+        <div class="text-block text-subtitle2">
+          {{ "Products list \n(" + number + " " + "items)" }}
+        </div>
       </div>
       <!-- <q-btn flat :label="'Products list ('+ data.length+' '+'items)'"></q-btn> -->
-      <q-space/>
+      <q-space />
       <q-btn v-if="desktop" label="Import" flat size="12px"></q-btn>
-      <q-btn label="Export" v-if="desktop" class="q-ml-sm" flat size="12px"></q-btn>
-      <q-btn icon="more_horiz" outline v-if="!desktop" class="q-pr-lg q-pl-lg q-ml-sm" size="14px"></q-btn>
       <q-btn
-        :label="desktop?'Add new product':'Add'"
-        :class=" desktop? 'q-ml-sm':'q-pr-lg q-pl-lg q-ml-sm'"
+        label="Export"
+        v-if="desktop"
+        class="q-ml-sm"
+        flat
+        size="12px"
+      ></q-btn>
+      <q-btn
+        icon="more_horiz"
+        outline
+        v-if="!desktop"
+        class="q-pr-lg q-pl-lg q-ml-sm"
+        size="14px"
+      ></q-btn>
+      <q-btn
+        :label="desktop ? 'Add new product' : 'Add'"
+        :class="desktop ? 'q-ml-sm' : 'q-pr-lg q-pl-lg q-ml-sm'"
         color="green-6"
         :size="desktop ? 'large' : '14px'"
       ></q-btn>
     </div>
-    <productsDesktop v-if="desktop" :tableData="tableData" :columns="columns" :count="count"/>
+    <productsDesktop
+      v-if="desktop"
+      :tableData="tableData"
+      :columns="columns"
+      :count="count"
+    />
 
-    <productsMobile v-else :tableData="tableData" :count="count"/>
+    <productsMobile v-else :tableData="tableData" :count="count" />
   </q-page>
 </template>
 
@@ -40,7 +62,7 @@ export default defineComponent({
     return {
       current: 1,
       totalPages: 50,
-      tableData: json,
+      tableData: [],
       filter: "",
       number: 0,
       desktop: false,
@@ -70,16 +92,22 @@ export default defineComponent({
         {
           name: "stock",
           label: "Stock",
-          align: "center",
+          align: "left",
           field: "stock",
-          sortable: false
+          sortable: false,
+          format: (_, row) => {
+            return row.stock + " in stock";
+          }
         },
         {
           name: "price",
           label: "Price",
           align: "center",
           field: "price",
-          sortable: false
+          sortable: false,
+          format: (_, row) => {
+            return row.price + " EGP";
+          }
         },
         {
           name: "type",
@@ -93,6 +121,7 @@ export default defineComponent({
   },
   methods: {
     async init() {
+      this.tableData = json;
       // this.tableData = await axios
       //   .get("https://api.mockaroo.com/api/422f8a50?count=1000&key=5ccc2440")
       //   .then(response => response.data);
