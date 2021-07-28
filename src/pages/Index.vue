@@ -121,6 +121,8 @@ export default defineComponent({
   },
   methods: {
     async init() {
+      // Comment the next line and uncomment the rest in this function if you are testing after 15-18 hour from the
+      // submitted time due to consuming all the free apis from mockaroo
       this.tableData = json;
       // this.tableData = await axios
       //   .get("https://api.mockaroo.com/api/422f8a50?count=1000&key=5ccc2440")
